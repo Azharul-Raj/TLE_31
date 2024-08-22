@@ -1,6 +1,6 @@
 /**
  *    author:  raj_001
- *    created: 2024-08-08 20:16:03
+ *    created: 2024-08-09 08:23:37
  **/
 #include <bits/stdc++.h>
 #define nl '\n'
@@ -12,38 +12,95 @@ using namespace std;
 #define sz(x) ((int)(x).size())
 #define all(x) (x).begin(), (x).end()
 
+void constract(vector<int> &a, int n, vector<int> &e, vector<int> &o)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (a[i] % 2)
+        {
+            o.pb(a[i]);
+        }
+        else
+        {
+            e.pb(a[i]);
+        }
+    }
+}
+
 void solve()
 {
     int n;
     cin >> n;
-    vector<int> a(n), b;
-    for (int &v : a)
-        cin >> v;
-
-    if (is_sorted(all(a)))
+    vector<int> a(n), e, o;
+    bool even = 0, odd = 0;
+    for (int i = 0; i < n; i++)
     {
-        cout << a.size() << nl;
-        for (int v : a)
-            cout << v << " ";
-        cout << nl;
-        return;
-    }
-    b.pb(a[0]);
-    for (int i = 1; i < n; i++)
-    {
-        if (a[i - 1] <= a[i])
+        cin >> a[i];
+        if (a[i] % 2)
         {
-            b.pb(a[i]);
+            odd = 1;
         }
         else
         {
-            b.pb(a[i]);
-            b.pb(a[i]);
+            even = 1;
         }
     }
-    // b.pb(a[n - 1]);
-    cout << b.size() << nl;
-    for (int v : b)
+    //
+    if (even && odd)
+    {
+
+        constract(a, n, e, o);
+    }
+    else if (even && !odd)
+    {
+        constract(a, n, e, o);
+        sort(all(e));
+        reverse(all(e));
+        // for (int v : e)
+        //     cout << v << " ";
+        if (e[0] == e[sz(e) - 1])
+        {
+            cout << -1 << nl;
+            return;
+        }
+        int l = e[sz(e) - 1];
+        for (int i = sz(e) - 1; i >= 0; i--)
+        {
+
+            if (l == e[i])
+            {
+                o.pb(e[i]);
+                e.ppb();
+            }
+        }
+    }
+    else
+    {
+        constract(a, n, e, o);
+        sort(all(o));
+        if (o[0] == o[sz(o) - 1])
+        {
+            cout << -1 << nl;
+            return;
+        }
+        int l = o[sz(o) - 1];
+        for (int i = sz(o) - 1; i >= 0; i--)
+        {
+
+            if (l == o[i])
+            {
+                e.pb(o[i]);
+                o.ppb();
+            }
+        }
+    }
+    // printing part is here
+
+    cout << o.size() << " " << e.size() << nl;
+    for (int v : o)
+        cout << v << " ";
+    cout << nl;
+    for (int v : e)
         cout << v << " ";
     cout << nl;
 }
