@@ -25,9 +25,7 @@ void solve()
     {
         cin >> a[i];
         if (a[i] % k == 0)
-        {
             y = 1;
-        }
         if (a[i] % 2 == 0)
             cnt++;
     }
@@ -43,17 +41,11 @@ void solve()
             ans = min(ans, k - m);
         }
         if (cnt >= 2)
-        {
             ans = min(ans, 0LL);
-        }
         else if (cnt == 1)
-        {
             ans = min(ans, 1LL);
-        }
         else
-        {
             ans = min(ans, 2LL);
-        }
     }
     else
     {
