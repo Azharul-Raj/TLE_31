@@ -1,6 +1,6 @@
 /**
  *    author:  raj_001
- *    created: 2024-08-22 21:23:59
+ *    created: 2024-08-23 21:41:17
  **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -37,42 +37,30 @@ typedef vector<cd> vcd;
 #define sz(x) ((int)(x).size())
 #define all(x) (x).begin(), (x).end()
 
-bool csSrt(pi a, pi b)
-{
-    if (a.first != b.first)
-    {
-        return a.first > b.first;
-    }
-    return b.second > a.second;
-}
-
 void solve()
 {
-    int n, k;
-    cin >> n >> k;
+    int n, k, q;
+    cin >> n >> k >> q;
     vi a(n);
-    vpi aa;
     fr(i, n) cin >> a[i];
-    // fr(i, n) cout << a[i] << " ";
+    ll seg = 0, ans = 0;
     fr(i, n)
     {
-        // cout << a[i] << " ";
-        int v = a[i] % k;
-        // cout << "here " << i << " " << v << nl;
-        int idx = i + 1;
-        if (v == 0)
+        if (a[i] <= q)
         {
-            aa.pb({k, idx});
-        }
-        else
-        {
-            aa.pb({v, idx});
+            seg++;
+            if (i == n - 1 || a[i + 1] > q)
+            {
+                if (seg >= k)
+                {
+                    ll n = seg - k + 1LL;
+                    ans += ((n * (n + 1)) / 2);
+                }
+                seg = 0;
+            }
         }
     }
-    // cout << sz(aa);
-    sort(all(aa), csSrt);
-    fr(i, n) cout << aa[i].second << " ";
-    cout << nl;
+    cout << ans << nl;
 }
 
 int32_t main()
