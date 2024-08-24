@@ -1,0 +1,109 @@
+const int N = 1e5 + 5;
+int t[4 * N];
+
+void build(int n, int b, int e)
+{
+    if (b == e)
+    {
+        t[n] = 0;
+        return;
+    }
+    int m = (b + e) / 2, l = 2 * n, r = (2 * n) + 1;
+    build(l, b, m);
+    build(r, m + 1, e);
+    t[n] = t[l] + t[r];
+}
+void update(int n, int b, int e, int p, int v)
+{
+
+    if (b > p || e < p)
+        return;
+    if (b == e)
+    {
+        t[n] = v;
+        return;
+    }
+    int m = (b + e) / 2, l = 2 * n, r = (2 * n) + 1;
+    update(l, b, m, p, v);
+    update(r, m + 1, e, p, v);
+    t[n] = t[l] + t[r];
+}
+//
+int sum(int n, int b, int e, int i, int j)
+{
+    if (e < i || b > j)
+        return 0;
+    if (b >= i && e <= j)
+    {
+        return t[n];
+    }
+    int m = (b + e) / 2, l = 2 * n, r = (2 * n) + 1;
+    return sum(l, b, m, i, j) + sum(r, m + 1, e, i, j);
+}
+
+void solve()
+{
+    int n, m;
+    cin >> n >> m;
+    vpi v(n);
+    fr(i, m)
+    {
+        // int a, b;
+        // cin >> a >> b;
+        cin >> v[i].first >> v[i].second;
+        // v.pb({a, b});
+    }
+    // build(1, 1, n);
+    int q;
+    cin >> q;
+    vi queries(q);
+    fr(i, q) cin >> queries[i];
+
+    auto ok = [&](int mid)
+    {
+        build(1, 1, n);
+
+        for (int i = 0; i <= mid; i++)
+        {
+            update(1, 1, n, queries[i], 1);
+        }
+
+        bool found = false;
+        for (int i = 0; i < m; i++)
+        {
+            int L = v[i].first, R = v[i].second, seg_len, one, zero;
+            seg_len = (R - L) + 1;
+            one = sum(1, 1, n, L, R);
+            zero = (seg_len - one);
+            if (one > zero)
+            {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    };
+    //
+    int l = 0, r = q - 1, mid, ans = -1;
+    while (r >= l)
+    {
+        mid = l + (r - l) / 2;
+        if (ok(mid))
+        {
+            ans = mid;
+            r = mid - 1;
+        }
+        else
+            l = mid + 1;
+    }
+    // cout << l << " " << r << nl;
+    if (ans == -1)
+    {
+        cout << ans << nl;
+    }
+    else
+    {
+        ans++;
+        cout << ans << nl;
+    }
+}
